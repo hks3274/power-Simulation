@@ -1,0 +1,206 @@
+QMainWindow {
+    background-color: #599cf7;
+}
+
+/* 전체 툴바 영역 */
+
+QToolBar {
+    background-color: #0c39b3;
+    border: none;
+    spacing: 0px;
+}
+
+/* === 툴바 버튼(QAction → QToolButton) === */
+QToolButton {
+    background-color: #0c39b3;
+    color: white;
+    border: none;
+    min-width: 110px;
+    min-height: 40px;
+    font-size:12pt;
+    font-weight: bold;
+}
+
+/* === 마우스 올렸을 때 === */
+QToolButton:hover {
+    background-color: #599cf7;
+    color: white;
+}
+
+/* === 클릭(체크)된 상태 === */
+QToolButton:checked {
+    background-color: #599cf7;
+    color: white;
+    border: none;
+}
+
+/* === 버튼 사이 구분선 제거 === */
+QToolBar::separator {
+    width: 0px;
+    height: 0px;
+}
+
+/* 리스트 영역 */
+
+/* === 왼쪽 리스트 영역 === */
+QListWidget {
+    background-color: #b4b5b8;
+    border: none;
+    outline: 0;
+    min-width: 100px;
+    margin: 5px 0px 5px 5px;
+}
+
+/* === 리스트 아이템 기본 상태 === */
+QListWidget::item {
+    background-color: #e5e5e5;
+    color: #222;
+    padding: 10px 6px;
+    border-bottom: 2px solid #f2f2f2;
+}
+
+/* === 마우스를 올렸을 때 === */
+QListWidget::item:hover {
+    background-color: white;
+}
+
+/* === 선택된 항목 === */
+QListWidget::item:selected {
+    background-color: white;
+    color: #222;
+    border: none;
+    font-weight: bold;
+}
+
+
+/* 오른쪽 영역 */
+/* === 오른쪽 전체 객체 === */
+QWidget#content {
+    background-color: white;
+    margin : 5px 5px 5px 0px;
+}
+QLabel#title {
+    font-size : 18px;
+    font-weight : bold;
+
+}
+
+/* === 이름(A,B,C,average,frequency 등..) 전체=== */
+QLabel#name {
+    font-size : 22px;
+    font-weight : bold;
+
+}
+
+/* === 이름(A,B,C,average,frequency 등..) 전체=== */
+QLabel#sequenceName {
+        font-size : 18px;
+        font-weight : bold;
+
+}
+
+
+/* === 값 전체 ===  */
+QLabel#val {
+    font-size : 36px;
+    color :  #377FEF;
+    font-weight : bold;
+    qproperty-alignment: 'AlignRight | AlignVCenter';
+}
+
+
+/* === 단위 전체 === */
+QLabel#u {
+    font-size : 22px;
+    color : #666;
+    font-weight : bold;
+    qproperty-alignment: 'AlignHCenter | AlignVCenter';
+}
+
+/* === 중간 이름 === */
+QLabel#middleName {
+    font-size : 22px;
+    color : #377FEF;
+    font-weight : bold;
+    margin: 0px;
+    qproperty-alignment: 'AlignHCenter | AlignBottom';
+}
+
+/* === 마지막 시간 표시 === */
+QLabel#minMaxLastTime{
+    font-size : 12px;
+    color : #666;
+    font-weight : bold;
+    margin: 0px;
+    qproperty-alignment: 'AlignHCenter | AlignVCenter';
+}
+
+
+
+/*phasor, waveform checkbox */
+QCheckBox#customCheckBox {
+    font-size : 14px;
+    font-weight : bold;
+    color : white;
+    background-color : #b4b5b8;
+    border: 2px solid #333;
+    border-radius: 2px;
+    padding: 2px 4px;
+    min-width: 75px;
+    min-height: 25px;
+}
+
+/* === 체크될 때 === */
+QCheckBox#customCheckBox:checked  {
+    background-color: #599cf7;
+    color: white;
+    border: 2px solid #333;
+}
+
+/* === 마우스 눌렀을 때 === */
+QCheckBox#customCheckBox:pressed {
+    background-color: #b4b5b8;
+    border: 2px solid #333;
+}
+
+QCheckBox#customCheckBox::indicator {
+    background-color: white;
+    width: 14px;
+    height: 14px;
+    border: 1px solid #666;
+    border-radius: 3px;
+}
+
+/* 체크 상태일 때만 체크 이미지 표시 */
+QCheckBox#customCheckBox::indicator:checked {
+    image: url(:/icon/checkMark.png);
+}
+
+QCheckBox#customCheckBox::indicator:pressed {
+    image: none;
+}
+
+QLabel#a3700PhasorTitle {
+    font-weight: bold;
+    font-size: 12px;
+}
+
+
+QPushButton#harmBtn {
+    font-size : 14px;
+    font-weight : bold;
+    color : white;
+    background-color : #b4b5b8;
+    border: 2px solid #333;
+    border-radius: 2px;
+    padding: 2px 4px;
+    min-width: 75px;
+    min-height: 25px;
+}
+
+QPushButton#harmBtn:checked {
+    background-color: #599cf7;
+    color: white;
+}
+
+

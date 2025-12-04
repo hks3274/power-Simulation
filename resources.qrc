@@ -1,0 +1,31 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>auto.png</file>
+    </qresource>
+	
+    <qresource prefix="/icon">
+        <file>checkMark.png</file>
+    </qresource>
+
+    <qresource prefix="/icon">
+        <file>play.png</file>
+    </qresource>	
+
+    <qresource prefix="/icon">
+        <file>pause.png</file>
+    </qresource>
+
+    <qresource prefix="/icon">
+        <file>downArrow.png</file>
+    </qresource>			
+
+    <qresource prefix="/styles">
+        <file>a3700n_style.qss</file>
+    </qresource>
+    <qresource prefix="/styles">
+        <file>a3700n_wave_style.qss</file>
+    </qresource>
+    <qresource prefix="/styles">
+        <file>a3700n_harm_style.qss</file>
+    </qresource>
+</RCC>
