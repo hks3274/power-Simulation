@@ -32,7 +32,7 @@
       <img src="https://github.com/hks3274/power-Simulation/blob/main/diagram_images/power_simulation_%ED%81%B4%EB%9E%98%EC%8A%A4_input.PNG?raw=true" width="50%">
 </p>
 
->- **입력 UI를 담당**하는 핵심 클래스들이며, 사용자가 전압, 전류, 고조파 등 다양한 파라미터를 직접 설정하는 역할을 수행한다. 이곳에서 사용자가 변경한 모든 값은 즉시 `dataManagement`로 전달되어 전체 시뮬레이션 과정에 반영된다. 또한 각 입력 위젯은 `QDockWidget` 형태로 `inputMainWindow`에 존재해, 사용자가 원하는 위치로 자유롭게 배치하거나 분리할 수 있도록 설계하였다. 
+>- **입력 UI를 담당**하는 핵심 클래스들이며, 사용자가 전압, 전류, 고조파 등 다양한 파라미터를 직접 설정하는 역할을 수행한다. 이곳에서 사용자가 변경한 모든 값은 즉시 `dataManagement`로 전달되어 전체 시뮬레이션 과정에 반영된다. 또한 각 입력 위젯은 **QDockWidget** 형태로 `inputMainWindow`에 존재해, 사용자가 원하는 위치로 자유롭게 배치하거나 분리할 수 있도록 설계하였다. 
 
 - `inputWidget`은 **전압과 전류의 3상(A·B·C상) 값과 각도(phase)** 를 입력받는 역할을 수행하며, 시뮬레이션의 기본 파형을 정의하는 가장 핵심적인 UI 요소이다
 
@@ -50,13 +50,13 @@
       <img src="https://github.com/hks3274/power-Simulation/blob/main/diagram_images/power_simulation_%ED%81%B4%EB%9E%98%EC%8A%A4_output.PNG?raw=true" width="50%">
 </p>
 
->- **출력 화면을 담당**하는 핵심 클래스들로, 사용자가 실제로 확인하는 그래프·수치·파형 등의 UI 요소를 구성한다. 이 클래스들은 `dataManagement`로부터 전달된 데이터를 받아 필요한 형태로 가공한 뒤 화면에 표시하는 역할을 수행한다. 또한 각 출력 위젯은 `MainWindow` 내부에서 `QDockWidget` 형태로 배치되므로, 사용자가 창의 위치를 자유롭게 이동하거나 분리하여 사용할 수 있다.
+>- **출력 화면을 담당**하는 핵심 클래스들로, 사용자가 실제로 확인하는 그래프·수치·파형 등의 UI 요소를 구성한다. 이 클래스들은 `dataManagement`로부터 전달된 데이터를 받아 필요한 형태로 가공한 뒤 화면에 표시하는 역할을 수행한다. 또한 각 출력 위젯은 `MainWindow` 내부에서 **QDockWidget** 형태로 배치되므로, 사용자가 창의 위치를 자유롭게 이동하거나 분리하여 사용할 수 있다.
 
 - `graphWidget`은 시뮬레이션된 3상 전압, 전류 합성파를 매 샘플 주기마다 실시간으로 그래프로 표시하는 역할을 수행한다. `dataManagement`에서 발생하는 `dataChanged()` 시그널이 바로 한 샘플 주기마다 발생하는 신호이기 때문에, graphWidget은 이 시그널을 수신할 때마다 최신 파형 데이터를 받아와 **QCustomPlot**을 통해 화면에 즉시 갱신한다. 이를 통해 사용자는 합성된 전압·전류 파형을 확인할 수 있다.
 
 - `RMSGraphWidget`은 파형의 한 주기가 완료될 때마다 RMS 값을 계산하여 그래프로 시각화하는 역할을 담당한다. `dataManagement`는 한 주기가 끝날 때마다 `rmsDataChanged()` 시그널을 발생시키며, `RMSGraphWidget`은 이 시그널을 수신하여 최신 RMS 데이터를 받아온다. 이를 바탕으로 3상 전압·전류의 RMS, 고조파 RMS, 그리고 고조파가 포함된 3상 합성 RMS 파형까지 함께 그래프로 표시한다. 이 그래프 또한 **QCustomPlot**을 사용해 화면에 갱신한다. 
 
-- `phasorWidget` 역시 한 주기가 완료될 때마다 갱신되며, 각 상의 위상 및 크기를 Phasor 형태로 시각화하는 역할을 수행한다. 실제 계산된 Phasor 값은 별도의 `phasorCalculator` 클래스에서 제공되지만(요약 구조에서는 생략), `phasorWidget`은 `rmsDataChanged()` 시그널을 통해 주기별 최신 값을 받아와 화면에 표시하도록 설계되어 있다.
+- `phasorWidget` 역시 한 주기가 완료될 때마다 갱신되며, 각 상의 위상 및 크기를 Phasor 형태로 시각화하는 역할을 수행한다. 실제 계산된 Phasor 값은 별도의 `phasorCalculator` 클래스에서 제공되지만(요약 구조에서는 생략), `phasorWidget`은 `rmsDataChanged()` 시그널을 통해 주기별 최신 값을 받아와 **QPainter**을 사용해 화면에 표시하도록 설계되어 있다.
 
 - `graphWidget`, `RMSGraphWidget`, `phasorWidget`은 모두 `MainWindow` 내부에 포함되어 있는 구성 요소로, `MainWindow`가 소멸하면 함께 사라지는 **강한 포함(composition) 관계**를 가진다. 각 위젯은 독립적으로 존재하지 않고 `MainWindow`의 생명주기에 종속되는 구조로 설계되어 있다.
 
@@ -76,4 +76,37 @@
 - `oneSecMainWindow`는 `oneSecCalcData` 객체를 내부에서 생성하고 관리하며, 그 생명주기를 책임지는 주체로 동작한다. 즉, `oneSecCalcData`는 `oneSecMainWindow`에 종속되어 있으며, 창이 생성될 때 함께 생성되고, 소멸할 때 함께 정리되는 **강한 포함(composition) 관계**를 가진다.
 
 #### 5. A3700N_GUI
+
+<p align="center">
+      <img src="https://github.com/hks3274/power-Simulation/blob/main/diagram_images/power_simulation_%ED%81%B4%EB%9E%98%EC%8A%A4_a3700.PNG?raw=true" width="50%">
+</p>
+
+> - `A3700N_GUI` 클래스는 시뮬레이션 결과를 사용자에게 최종적으로 제공하는 마지막 단계의 출력 클래스이다. 이 클래스는 1초 단위 데이터 창에서 전달된 값을 기반으로, 더욱 확장된 형태의 전력 계측 정보를 시각화하여 보여준다. 
+
+- 앞서 설명한 `oneSecCalcData`에서 전달되는 `oneSecList` 데이터를 받아 이를 다양한 출력 위젯에 반영함으로써 사용자에게 종합적인 시뮬레이션 결과를 제공한다.
+
+- 다만 파형, 고조파, Phasor와 같은 시각적 요소는 단순히 oneSecList 데이터만 받아 표시하는 방식으로 구현할 수 없기 때문에, 각각을 담당하는 별도의 위젯을 구성해야 한다. 전압·전류의 평균값, 유효전력, 무효전력, 역률과 같은 수치 기반 전력 분석 정보는 oneSecCalcData에서 계산된 값을 그대로 가져와 표시할 수 있지만,  
+**파형(waveform)** 은 **QCustomPlot**을   
+**위상도(Phasor)** 는 **QPainter** 기반의 사용자 정의 그리기 로직을   
+**고조파(harmonic)** 는 막대 그래프 형태를 사용해야 하므로 **QCustomPlot의 bar graph** 기능을   
+각각 활용해야 한다. 따라서 이러한 다양한 표시 방식과 그래픽 도구를 처리하기 위해, `A3700N_wave`, `A3700N_phasor`, `A3700N_harm`과 같이 전용 위젯 클래스를 별도로 설계하는 것이 필수적이다.
+
+- `A3700N_wave`는 앞서 설명한 것처럼 **QCustomPlot**을 사용해 시뮬레이션된 파형(Waveform)을 시각화하는 위젯이다. 이 출력 창에서는 실시간 파형 전체를 모두 표시하는 대신, 1초가 종료된 시점에서의 최신 2주기만을 추출하여 보여주도록 설계하였다. 이를 통해 사용자는 해당 시점의 파형 형태를 보다 명확하게 파악할 수 있다. 또한 `dataChanged()` 시그널을 수신할 때마다 내부적으로 한 주기를 계산하고, 그 결과를 기반으로 파형을 갱신한다.
+
+- `A3700N_phasor`는 **QPainter**를 활용해 각 상(Phase)의 위상 관계와 크기를 시각적으로 표현하는 위젯이다. 이 출력은 1초가 지날 때마다 최신 Phasor 값을 가져와 갱신하는 방식으로 동작하며, 내부적으로 `rmsDataChanged()` 시그널을 통해 업데이트가 이루어진다. 다이어그램에는 표기되어 있지 않지만, 실제 구현에서는 전용 계산 클래스인 `phasorCalculator`에서 Phasor 데이터를 산출하고, A3700N_phasor는 이를 받아 위상도를 그려낸다.
+
+- `A3700N_harm`은 **QCustomPlot**의 **Bar Graph** 기능을 활용하여 각 차수별 고조파(harmonic) 성분의 크기를 시각적으로 표현하는 위젯이다. 이 출력 창에서는 1초가 경과했을 때의 최신 고조파 데이터를 가져와 막대 그래프로 표시하며, 이를 통해 사용자가 전체 고조파 분포를 한눈에 확인할 수 있도록 한다. 또한 `rmsDataChanged()` 시그널을 수신할 때마다 새로운 데이터를 반영해 그래프를 갱신하는 방식으로 동작한다.
+
+#### 6. 기타 구조
+- `inputMainWindow`, `MainWindow`, `oneSecMainWindow`, `A3700N_GUI`는 서로 **약한 포함(aggregation) 관계**를 가진다. 각 창은 독립적으로 생성·소멸할 수 있으며, 특정 윈도우가 닫히더라도 다른 윈도우의 생명주기에는 영향을 주지 않는다. 이를 위해 전체 메뉴바에 **창 열기(Open Window)** 기능을 구현하여 사용자가 원하는 시점에 개별 윈도우를 활성화할 수 있도록 하였고, 각 윈도우 내부에서도 다른 창을 열고 닫을 수 있는 메뉴를 제공함으로써 유연한 UI 구성과 독립적인 창 관리가 가능하도록 설계하였다.
+
+#### 7. 자세한 구조
+<p align="center">
+      <img src="https://github.com/hks3274/power-Simulation/blob/main/diagram_images/power_simulation_%ED%81%B4%EB%9E%98%EC%8A%A4%EB%8B%A4%EC%9D%B4%EC%96%B4%EA%B7%B8%EB%9E%A8_%EC%9E%90%EC%84%B8%ED%9E%88.PNG?raw=true" width="80%">
+</p>
+
+- 다음은 전체 시스템의 구조를 보다 상세하게 표현한 클래스 다이어그램이다. struct 형태로 이루어진 방대한 데이터 타입들은 복잡도를 줄이기 위해 다이어그램에 모두 포함하지는 않았지만, 각 클래스 간 관계와 책임 범위를 파악하기에는 충분한 수준의 정보를 제공한다. 다이어그램에서 보이는 생소한 타입 대부분은 프로젝트 내에서 정의한 사용자 지정 구조체이며, 자세한 내용은 **GitHub의 dataStructures.h 파일을 참고**하면 된다.
+
+
+---
 
