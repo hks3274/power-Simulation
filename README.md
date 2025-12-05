@@ -32,12 +32,19 @@
       <img src="https://github.com/hks3274/power-Simulation/blob/main/diagram_images/power_simulation_%ED%81%B4%EB%9E%98%EC%8A%A4_input.PNG?raw=true" width="50%">
 </p>
 
->- 입력 UI를 담당하는 핵심 클래스이며, 사용자가 전압, 전류, 고조파 등 다양한 파라미터를 직접 설정하는 역할을 수행한다. 이곳에서 변경된 값들은 dataManagement로 전달되어 전체 시뮬레이션 동작에 반영된다.
-
+>- 입력 UI를 담당하는 핵심 클래스이며, 사용자가 전압, 전류, 고조파 등 다양한 파라미터를 직접 설정하는 역할을 수행한다. 이곳에서 사용자가 변경한 모든 값은 즉시 `dataManagement`로 전달되어 전체 시뮬레이션 과정에 반영된다. 또한 각 입력 위젯은 `QDockWidget` 형태로 구성되어 있어, 사용자가 원하는 위치로 자유롭게 배치하거나 분리할 수 있도록 설계하였다. 
 
 - `inputWidget`은 **전압과 전류의 3상(A·B·C상) 값과 각도(phase)** 를 입력받는 역할을 수행하며, 시뮬레이션의 기본 파형을 정의하는 가장 핵심적인 UI 요소이다
 
 - `inputSettingWidget`은 시뮬레이션의 **전반적인 동작 환경을 결정하는 설정 값**을 입력받는다. 여기에는 주파수, 초당 사이클 수(cycle per second), 사이클당 샘플 수(sample per cycle) 등이 포함되며, 이는 샘플링 해상도와 파형 생성 속도 같은 시스템의 타이밍 구조에 직접적인 영향을 미친다.
 
 - `harmonicWidget`은 기본 파형에 추가되는 **고조파(harmonics)의 크기와 각도를 설정**하는 UI로, 고조파가 전력에 미치는 영향을 실험할 때 중요한 역할을 한다. 특정 차수의 고조파를 선택해 크기와 위상을 조정할 수 있다.
-- `inputWidget`은 
+
+- `inputWidget`은 내부에 `sliderEdit`과 `dialEdit`과 같은 반복적으로 사용되는 입력 그룹을 별도 클래스로 묶어 재사용성 있게 구성하였다. 이를 통해 UI 요소를 일관된 방식으로 관리할 수 있을 뿐만 아니라, 동일한 입력 패턴을 여러 곳에서 사용할 때 발생하는 코드 중복을 크게 줄였다. 
+
+- `inputWidget`, `inputSettingWidget`, `harmonicWidget`은 모두 `inputMainWindow` 내부에 포함된 구성 요소로, `inputMainWindow`가 소멸하면 함께 사라지는 강한 포함(composition) 관계를 가진다. 각각의 위젯이 실제로 사용자 입력을 받아 `dataManagement`에 값을 전달하는 역할을 수행하지만, 이 위젯들은 독립적으로 존재하는 것이 아니라 `inputMainWindow`의 UI 구조와 생명주기에 완전히 종속된 형태로 동작한다. 즉, 입력 처리의 책임은 각 위젯이 담당하되, 이들을 하나의 입력 인터페이스로 묶어 관리하는 중심 컨테이너가 `inputMainWindow`라고 볼 수 있다. 
+- `sliderEdit`과 `dialEdit` 역시 `inputWidget` 내부에서 생성되고 관리되는 **강한 포함(composition) 관계**를 가진다. 즉, `inputWidget`이 소멸하면 이들 컴포넌트도 함께 소멸관계로 구성되지만, 구조적으로는 범용 입력 컴포넌트로 설계되어 있기 때문에 필요하다면 다른 위젯에서도 동일한 방식으로 재사용이 가능하다. 
+
+### 3. 출력(MainWindow-output)
+
+ 
