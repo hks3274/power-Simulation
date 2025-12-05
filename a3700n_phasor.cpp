@@ -150,6 +150,8 @@ a3700n_phasor::a3700n_phasor(dataManagement &dataMng, bool volCheck, bool curChe
 
     mainLay->addWidget(infoArea, 1);
 
+    phasorCalc = new phasorCalculator(dataMng);
+
     connect(vLLBtn, &QPushButton::toggled, this, [this](){
         nowUpdate(lastPh);
     });
@@ -161,11 +163,11 @@ a3700n_phasor::a3700n_phasor(dataManagement &dataMng, bool volCheck, bool curChe
 
 
 // 데이터 업데이트
-void a3700n_phasor::updatePhasor(dataManagement::measure_data m)
+void a3700n_phasor::updatePhasor(measure_data m)
 {
     auto elapsed = m.t - prev_sumTime;
 
-    auto ph = dataMng.calcPhasor();
+    auto ph = phasorCalc->calcPhasor();
 
     lastPh = ph;
 
@@ -178,7 +180,7 @@ void a3700n_phasor::updatePhasor(dataManagement::measure_data m)
 }
 
 
-void a3700n_phasor::nowUpdate(dataManagement::phasor_data ph) {
+void a3700n_phasor::nowUpdate(phasor_data ph) {
 
     if(vLLBtn->isChecked()){
         voltMagLabels[0]->setText(QString::number(ph.vALLMag, 'f', 2));

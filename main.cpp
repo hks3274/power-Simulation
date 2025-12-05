@@ -5,6 +5,7 @@
 #include <QTextStream>
 #include <QDebug>
 #include "dataManagement.h"
+#include "oneseccalcdata.h"
 #include "onesecmainwindow.h"
 #include "inputmainwindow.h"
 #include "a3700n_gui.h"
@@ -149,6 +150,8 @@ int main(int argc, char *argv[])
             qApp->quit();
         }
     };
+
+
     QObject::connect(&w,  &QWidget::destroyed, maybeQuit);
     QObject::connect(&ow, &QWidget::destroyed, maybeQuit);
     QObject::connect(&iw, &QWidget::destroyed, maybeQuit);

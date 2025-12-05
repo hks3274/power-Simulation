@@ -177,7 +177,7 @@ void graphWidget::updateFixedTicks(double rangeStart, double rangeEnd)
 
 void graphWidget::updateGraph()
 {
-    auto s = dataMng.getLatestVoltageAndCurrent();
+    auto s = dataMng.data_queue.back();
     double x = std::chrono::duration<double>(s.t).count();
     const double Fs = dataMng.getCyclePerSecond() * dataMng.getSamplePerCycle();
     const double xq = std::round(x * Fs) / Fs;  // 격자(Δt=1/Fs)로 반올림
@@ -195,8 +195,7 @@ void graphWidget::updateGraph()
     vBBuffer.append({xq, vB});  cBBuffer.append({xq, iB});
     vCBuffer.append({xq, vC});  cCBuffer.append({xq, iC});
 
-    // ===== 갱신 판정은 샘플 수로 =====
-    sampleIndex_++;     // 전체 샘플 인덱스 증가 -> 나중에 쓰일 것?
+    // ===== 갱신 판정은 샘플 수로 ====
     emitCounter_++;     // 이번 프레임 이후 누적
 
     const int spc = std::max(1, dataMng.getSamplePerCycle());

@@ -27,15 +27,15 @@ public:
     void setOneSecWindow(oneSecMainWindow* oneSecWin);
     void setA3700Window(A3700N_GUI* a3700Win);
 
-protected:
-     void closeEvent(QCloseEvent* event) override;
+// protected:
+//      void closeEvent(QCloseEvent* event) override;
 
 public slots:
     void doLoadAction();
 
 private:
     // 중앙 위젯은 꼭 필요하므로 더미 QWidget 하나 둠
-    QWidget* centralDummy = nullptr;
+    //QWidget* centralDummy = nullptr;
 
     // 각 Dock
     QDockWidget* midTopDock = nullptr; // 그래프(파형)
@@ -51,8 +51,7 @@ private:
     show_hide_check_widget* showWidget = nullptr;
 
     // 기타
-    settingStorage settings;
-    dataManagement& m_data;
+    dataManagement& dataMng;
     QToolButton*   runButton = nullptr;
 
     inputMainWindow* inputWindow = nullptr;

@@ -197,9 +197,6 @@ settingDialog::settingDialog (settingStorage& storage, dataManagement& dataMng, 
     });
 
 
-
-
-
     // --- 초기 상태 (현재값 보기) ---
     saveButton->setEnabled(true);
     nameEdit->setEnabled(true);

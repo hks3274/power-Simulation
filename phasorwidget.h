@@ -2,6 +2,7 @@
 #define PHASORWIDGET_H
 
 #include "dataManagement.h"
+#include "phasorcalculator.h"
 #include <QWidget>
 #include <QLabel>
 #include <QVBoxLayout>
@@ -19,10 +20,11 @@ protected:
     void paintEvent(QPaintEvent*) override;
 
 private slots:
-    void updatePhasor(dataManagement::measure_data);
+    void updatePhasor(measure_data);
 
 private:
     dataManagement& dataMng;
+    phasorCalculator* phasorCalc;
 
     // 3상 기본파(복소)
     double vAX{0}, vAY{0}, vBX{0}, vBY{0}, vCX{0}, vCY{0};
@@ -38,8 +40,6 @@ private:
     bool showIa{true}, showIb{true}, showIc{true};
     bool showVH{true}, showIH{true};
 
-
-    void refreshLegend();
 };
 
 #endif // PHASORWIDGET_H

@@ -18,8 +18,7 @@
 
 MainWindow::MainWindow(dataManagement& dataMng,QWidget* parent)
     : QMainWindow(parent)
-    , settings("mydb.sqlite")
-    , m_data(dataMng)
+    , dataMng(dataMng)
 {
     // 메뉴바
     QMenuBar* menubar = menuBar();
@@ -62,22 +61,19 @@ MainWindow::MainWindow(dataManagement& dataMng,QWidget* parent)
 
 
     // 중앙 더미 위젯 (Dock용 중앙 영역)
-    centralDummy = new QWidget(this);
+    /*centralDummy = new QWidget(this);
     centralDummy->setFixedSize(1, 1);
-    setCentralWidget(centralDummy);
+    setCentralWidget(centralDummy);*/
 
     setDockNestingEnabled(true);
     setWindowTitle("QT기반 전력계측 시뮬레이션 SW");
     resize(1200, 1000);
 
-    // 설정 로드
-    settings.loadByName(settings.getLastLoadedName(), dataMng);
-
     // --- 실제 위젯 생성 ---
-    gWidget    = new graphWidget(m_data);
-    rmsGWidget = new rmsGraphWidget(m_data);
-    pWidget    = new phasorWidget(m_data);
-    showWidget = new show_hide_check_widget(m_data);
+    gWidget    = new graphWidget(dataMng);
+    rmsGWidget = new rmsGraphWidget(dataMng);
+    pWidget    = new phasorWidget(dataMng);
+    showWidget = new show_hide_check_widget(dataMng);
 
 
     // --- Dock 생성 ---
@@ -141,11 +137,11 @@ MainWindow::MainWindow(dataManagement& dataMng,QWidget* parent)
     move(x, y);
 }
 
-void MainWindow::closeEvent(QCloseEvent* event)
-{
-    m_data.setTimeScale(1);  // MainWindow 닫을 때만
-    QMainWindow::closeEvent(event);
-}
+// void MainWindow::closeEvent(QCloseEvent* event)
+// {
+//     m_data.setTimeScale(1);  // MainWindow 닫을 때만
+//     QMainWindow::closeEvent(event);
+// }
 
 // inputMainWindow 신호 등에서 호출할 “불러온 값 반영” 핸들러
 void MainWindow::doLoadAction()

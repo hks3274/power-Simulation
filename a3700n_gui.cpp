@@ -614,7 +614,7 @@ QWidget* A3700N_GUI::createPage(const QStringList& listNames)
             //waveform 그리기 -> 데이터 연동?
             //Widget을 만들어서 보여준다..
 
-            a3700n_wave* waveWidget = new a3700n_wave(dataMng);
+            waveWidget = new a3700n_wave(dataMng);
             vLay->addSpacing(-10);
             vLay->addWidget(waveWidget);
 
@@ -723,7 +723,7 @@ void A3700N_GUI::syncMinMaxButtons()
 }
 
 
-void A3700N_GUI::updateOneSec(dataManagement::oneSecList* osl) //d여기서 voltage, current Check버튼 값 보내기
+void A3700N_GUI::updateOneSec(oneSecList *osl) //d여기서 voltage, current Check버튼 값 보내기
 {
     if (!osl || !mainStack) return;
 

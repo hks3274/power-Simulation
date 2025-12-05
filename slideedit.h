@@ -10,28 +10,26 @@ class slideEdit : public QWidget
 {
     Q_OBJECT
 public:
-    explicit slideEdit(QString cText, double cValue, double Max, double Min);
+    explicit slideEdit(QString titleName, double value, double max, double min);
 
-    void setValue(double newVal);
+    void setValue(double value);
 
 signals:
-    void valueChanged(double v);
+    void valueChanged(int value);
 
 private slots:
     void lineEditChanged();
     void sliderChanged();
 
 private:
-    QLabel*   cLabel = nullptr;
-    QLineEdit* cLineEdit = nullptr;
-    QSlider*   cSlider = nullptr;
+    QLabel*   title = nullptr;
+    QLineEdit* lineValue = nullptr;
+    QSlider*   lineSlider = nullptr;
 
     QLabel* minLabel = nullptr;
     QLabel* maxLabel = nullptr;
 
-    double cValue = 0.0;
-    double cMin = 0.0;
-    double cMax = 0.0;
+    double value = 0.0;
 };
 
 #endif // SLIDEEDIT_H

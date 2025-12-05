@@ -4,36 +4,36 @@
 #include <QFrame>
 #include <QFontMetrics>
 
-slideEdit::slideEdit(QString cText, double cValue, double Max, double Min)
-    : cValue(cValue), cMin(Min), cMax(Max)
+slideEdit::slideEdit(QString titleName, double value, double max, double min)
+    : value(value)
 {
     // 라벨
-    cLabel = new QLabel(cText, this);
+    title = new QLabel(titleName, this);
     QFont boldFont("나눔고딕", 9, QFont::Bold);
-    cLabel->setFont(boldFont);
+    title->setFont(boldFont);
 
     // 라인에딧 (숫자 가독성 위해 최소 폭만 제안)
-    cLineEdit = new QLineEdit(QString::number(cValue), this);
-    cLineEdit->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    lineValue = new QLineEdit(QString::number(value), this);
+    lineValue->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     {
-        QFontMetrics fm(cLineEdit->font());
-        cLineEdit->setMinimumWidth(fm.horizontalAdvance(QStringLiteral("−0000.00")) + 10);
+        QFontMetrics fm(lineValue->font());
+        lineValue->setMinimumWidth(fm.horizontalAdvance(QStringLiteral("−0000.00")) + 10);
     }
 
     // 슬라이더 (내부 스케일 10배)
-    cSlider = new QSlider(Qt::Horizontal, this);
-    cSlider->setRange(static_cast<int>(Min * 10), static_cast<int>(Max * 10));
-    cSlider->setValue(static_cast<int>(cValue * 10.0));
-    cSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    cSlider->setSingleStep(1);   // ←/→ 키, 휠(한 칸)
-    cSlider->setPageStep(10);    // PgUp/PgDn
-    cSlider->setTracking(true);
-    cSlider->setFocusPolicy(Qt::StrongFocus);
-    cSlider->setToolTip("←/→: 미세 조절, PgUp/PgDn: 크게 조절, 마우스 휠 지원");
+    lineSlider = new QSlider(Qt::Horizontal, this);
+    lineSlider->setRange(static_cast<int>(min * 10), static_cast<int>(max * 10));
+    lineSlider->setValue(static_cast<int>(value * 10.0));
+    lineSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    lineSlider->setSingleStep(1);   // ←/→ 키, 휠(한 칸)
+    lineSlider->setPageStep(10);    // PgUp/PgDn
+    lineSlider->setTracking(true);
+    lineSlider->setFocusPolicy(Qt::StrongFocus);
+    lineSlider->setToolTip("←/→: 미세 조절, PgUp/PgDn: 크게 조절, 마우스 휠 지원");
 
     // min/max 라벨
-    minLabel = new QLabel(QString::number(Min), this);
-    maxLabel = new QLabel(QString::number(Max), this);
+    minLabel = new QLabel(QString::number(min), this);
+    maxLabel = new QLabel(QString::number(max), this);
     minLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     maxLabel->setAlignment(Qt::AlignLeft  | Qt::AlignVCenter);
     minLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -44,13 +44,13 @@ slideEdit::slideEdit(QString cText, double cValue, double Max, double Min)
     sliderLayout->setContentsMargins(4, 2, 4, 2);
     sliderLayout->setSpacing(4);
     sliderLayout->addWidget(minLabel);
-    sliderLayout->addWidget(cSlider, /*stretch*/1);
+    sliderLayout->addWidget(lineSlider, /*stretch*/1);
     sliderLayout->addWidget(maxLabel);
 
     auto labelLayout = new QHBoxLayout();
     labelLayout->setContentsMargins(4, 2, 4, 2);
     labelLayout->setSpacing(4);
-    labelLayout->addWidget(cLineEdit);
+    labelLayout->addWidget(lineValue);
 
     // 프레임 (연한 톤)
     QFrame* outerFrame = new QFrame(this);
@@ -70,7 +70,7 @@ slideEdit::slideEdit(QString cText, double cValue, double Max, double Min)
     auto frameLayout = new QHBoxLayout();
     frameLayout->setContentsMargins(6, 4, 6, 4);
     frameLayout->setSpacing(8);
-    frameLayout->addWidget(cLabel);
+    frameLayout->addWidget(title);
     frameLayout->addLayout(frameLayout_inner);
 
     outerFrame->setLayout(frameLayout);
@@ -83,32 +83,32 @@ slideEdit::slideEdit(QString cText, double cValue, double Max, double Min)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     // 시그널 연결
-    connect(cSlider,   &QSlider::valueChanged,    this, &slideEdit::sliderChanged);
-    connect(cLineEdit, &QLineEdit::returnPressed, this, &slideEdit::lineEditChanged);
+     connect(lineSlider,   &QSlider::valueChanged,    this, &slideEdit::sliderChanged);
+    connect(lineValue, &QLineEdit::returnPressed, this, &slideEdit::lineEditChanged);
 }
 
 void slideEdit::lineEditChanged()
 {
     bool ok = false;
-    double newVal = cLineEdit->text().toDouble(&ok);
+    double newVal = lineValue->text().toDouble(&ok);
     if (ok) {
-        cValue = newVal * 10.0;
-        cSlider->setValue(static_cast<int>(cValue));
+        value = newVal * 10.0;
+        lineSlider->setValue(static_cast<int>(value));
     } else {
-        cLineEdit->setText(QString::number(cValue / 10.0));
+        lineValue->setText(QString::number(value / 10.0));
     }
 }
 
 void slideEdit::sliderChanged()
 {
-    cValue = cSlider->value();
-    cLineEdit->setText(QString::number(cValue / 10.0));
-    emit valueChanged(cValue / 10.0);
+    value = lineSlider->value();
+    lineValue->setText(QString::number(value / 10.0));
+    emit valueChanged(value / 10.0);
 }
 
 void slideEdit::setValue(double newVal)
 {
-    cValue = newVal * 10.0; // 내부는 10배 스케일
-    cSlider->setValue(static_cast<int>(cValue));
-    cLineEdit->setText(QString::number(newVal));
+    value = newVal * 10.0; // 내부는 10배 스케일
+    lineSlider->setValue(static_cast<int>(value));
+    lineValue->setText(QString::number(newVal));
 }

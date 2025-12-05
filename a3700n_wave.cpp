@@ -339,7 +339,7 @@ void a3700n_wave::updateGraph()
         return;
     }
 
-    auto s = dataMng.getLatestVoltageAndCurrent();
+    auto s = dataMng.data_queue.back();
     const double vA = s.vAVal, iA = s.cAVal;
     const double vB = s.vBVal, iB = s.cBVal;
     const double vC = s.vCVal, iC = s.cCVal;

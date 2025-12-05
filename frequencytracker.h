@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "dataManagement.h"
+#include "phasorcalculator.h"
 
 class DFTKalmanTracker; // 전방 선언
 
@@ -19,11 +20,13 @@ signals:
     void cpsChanged(double new_fs);
 
 private slots:
-    void onRms(dataManagement::measure_data m);
+    void onRms(measure_data m);
 
 
 private:
     dataManagement& dataMng;
+    phasorCalculator* phasorCalc;
+
     bool running = false;
     double prevPhaseRad = 0.0;
     bool first = true;

@@ -17,6 +17,7 @@ inline double wrap_pi(double x) {
 frequencytracker::frequencytracker(dataManagement& dataMng)
     : dataMng(dataMng)
 {
+    phasorCalc = new phasorCalculator(dataMng);
     connect(&dataMng, &dataManagement::rmsDataChanged,
             this, &frequencytracker::onRms);
 }
@@ -32,10 +33,10 @@ void frequencytracker::stop() {
     qDebug() << "[Tracker] 중지";
 }
 
-void frequencytracker::onRms(dataManagement::measure_data m) {
+void frequencytracker::onRms(measure_data m) {
     if(!running) return;
 
-    auto ph = dataMng.calcPhasor();
+    auto ph = phasorCalc->calcPhasor();
     double phaseNow = qDegreesToRadians(ph.vAPhaseDeg);
 
     // --- 초기화 ---

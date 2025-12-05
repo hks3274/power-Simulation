@@ -11,6 +11,7 @@
 #include <QVector>
 #include <QPushButton>
 #include "dataManagement.h"
+#include "phasorcalculator.h"
 
 class a3700n_phasor : public QWidget
 {
@@ -21,7 +22,7 @@ public:
 public slots:
     void setVolCheck(bool enabled);
     void setCurCheck(bool enabled);
-    void updatePhasor(dataManagement::measure_data m);
+    void updatePhasor(measure_data m);
 
 protected:
     void paintEvent(QPaintEvent*) override;
@@ -30,7 +31,7 @@ private:
     dataManagement& dataMng;
     bool volCheck, curCheck;
 
-    dataManagement::measure_data lastM;
+    phasorCalculator* phasorCalc;
 
     // 오른쪽 수치표 라벨 저장
     QVector<QLabel*> voltMagLabels, voltPhaseLabels;
@@ -49,9 +50,9 @@ private:
     QPushButton* vLLBtn;
     QPushButton* vLNBtn;
 
-    dataManagement::phasor_data lastPh;
+    phasor_data lastPh;
 
-    void nowUpdate(dataManagement::phasor_data ph);
+    void nowUpdate(phasor_data ph);
 };
 
 #endif

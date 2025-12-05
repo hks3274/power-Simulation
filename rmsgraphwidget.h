@@ -17,7 +17,7 @@ public:
     void setRmsVisible(const QString& key, bool visible);
 
 private slots:
-    void updateData(dataManagement::measure_data m);
+    void updateData(measure_data m);
 
 private:
     dataManagement& dataMng;

@@ -1,13 +1,17 @@
 #include "phasorwidget.h"
+#include "phasorcalculator.h"
 #include <QString>
 #include <QPainter>
 #include <QtMath>
+#include <complex>
 
 phasorWidget::phasorWidget(dataManagement& dataMng)
     : dataMng(dataMng)
 {
     setMinimumSize(220, 180);
     setAttribute(Qt::WA_OpaquePaintEvent, true);
+
+    phasorCalc = new phasorCalculator(dataMng);
 
     // 한 주기마다 갱신
     connect(&dataMng, &dataManagement::rmsDataChanged,
@@ -19,9 +23,9 @@ phasorWidget::phasorWidget(dataManagement& dataMng)
     showVH = showIH = true;
 }
 
-void phasorWidget::updatePhasor(dataManagement::measure_data)
+void phasorWidget::updatePhasor(measure_data)
 {
-    auto ph = dataMng.calcPhasor();
+    auto ph = phasorCalc->calcPhasor();
 
     // 기본파(3상)
     vAX = ph.vAReal; vAY = ph.vAImag;
@@ -139,3 +143,4 @@ void phasorWidget::paintEvent(QPaintEvent*)
     if (showVH && valid(hvX, hvY)) drawArrow(dirX(hvX, hvY), dirY(hvX, hvY), sVH, VOLT_R, 2, true, 0.8, "Vh");
     if (showIH && valid(hcX, hcY)) drawArrow(dirX(hcX, hcY), dirY(hcX, hcY), sIH, CURR_R, 2, true, 0.8, "Ih");
 }
+

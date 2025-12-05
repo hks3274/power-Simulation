@@ -310,7 +310,7 @@ void rmsGraphWidget::updateFixedTicks(double rangeStart, double rangeEnd)
     plotHarmonicVI->xAxis->setTicker(textTicker3);
 }
 
-void rmsGraphWidget::updateData(dataManagement::measure_data m)
+void rmsGraphWidget::updateData(measure_data m)
 {
     const double tSec = duration<double>(m.t).count();
 

@@ -11,6 +11,7 @@
 #include <QGridLayout>
 #include <QSpinBox>
 #include "dataManagement.h"
+#include "dialedit.h"
 #include "slideedit.h"
 
 class inputWidget : public QWidget
@@ -26,22 +27,17 @@ private:
     dataManagement& dataMng;
     slideEdit* vASlideEdit;
     slideEdit* iASlideEdit;
-    QSpinBox *iAPhaseSpin;
-    QDial *iAPhaseDial;
+    dialEdit* iADialEdit;
 
     slideEdit* vBSlideEdit;
-    QSpinBox *vBPhaseSpin;
-    QDial *vBPhaseDial;
+    dialEdit* vBDialEdit;
     slideEdit* iBSlideEdit;
-    QSpinBox *iBPhaseSpin;
-    QDial *iBPhaseDial;
+    dialEdit* iBDialEdit;
 
     slideEdit* vCSlideEdit;
-    QSpinBox *vCPhaseSpin;
-    QDial *vCPhaseDial;
+    dialEdit* vCDialEdit;
     slideEdit* iCSlideEdit;
-    QSpinBox *iCPhaseSpin;
-    QDial *iCPhaseDial;
+    dialEdit* iCDialEdit;
 
 };
 

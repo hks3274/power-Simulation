@@ -9,8 +9,6 @@ inputWidget::inputWidget(dataManagement& dataMng) //생성자를 호출할 때 �
     vl->setContentsMargins(8, 8, 8, 8);
     vl->setSpacing(8);
 
-    QFont boldFont("나눔고딕", 10, QFont::Bold);
-
     // ===== 상 A =====
     {
         // 전압 A : 크기만
@@ -21,45 +19,9 @@ inputWidget::inputWidget(dataManagement& dataMng) //생성자를 호출할 때 �
         iASlideEdit = new slideEdit("전류 A (A)", dataMng.getIAValue(), 20.0, -20.0);
         vl->addWidget(iASlideEdit);
 
-        // 전류 A : 위상 (아래 줄에 다이얼)
-        {
-            auto frame = new QFrame(this);
-            frame->setFrameStyle(QFrame::Box | QFrame::Plain);
-            frame->setLineWidth(1);
-            frame->setObjectName("phaseFrameA_I");
-            frame->setStyleSheet("#phaseFrameA_I { border: 1px solid #ccc; border-radius: 5px; background-color: #eee; }");
+        iADialEdit = new dialEdit("전류 A 위상(°)", dataMng.getIAPhaseDeg());
+        vl->addWidget(iADialEdit);
 
-            auto lay = new QHBoxLayout(frame);
-            QLabel* lbl = new QLabel("전류 A 위상(°)");
-            lbl->setFont(boldFont);
-
-            iAPhaseDial = new QDial();
-            iAPhaseDial->setRange(-180, 180);
-            iAPhaseDial->setValue(dataMng.getIAPhaseDeg());
-            iAPhaseDial->setNotchesVisible(true);
-
-            iAPhaseSpin = new QSpinBox();
-            iAPhaseSpin->setRange(-180, 180);
-            iAPhaseSpin->setValue(dataMng.getIAPhaseDeg());
-            iAPhaseSpin->setSuffix("°");
-
-            lay->addWidget(lbl);
-            lay->addWidget(iAPhaseDial);
-            lay->addWidget(iAPhaseSpin);
-            vl->addWidget(frame);
-
-            // === 연동 ===
-            connect(iAPhaseDial, &QDial::valueChanged, this, [&](int deg){
-                if (iAPhaseSpin->value() != deg)
-                    iAPhaseSpin->setValue(deg);
-            });
-
-            connect(iAPhaseSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, [&](int deg){
-                if (iAPhaseDial->value() != deg)
-                    iAPhaseDial->setValue(deg);
-                dataMng.setIAPhaseDeg(deg);
-            });
-        }
 
         // A상 크기 연동
         connect(vASlideEdit, &slideEdit::valueChanged, this, [&](int value) {
@@ -70,6 +32,12 @@ inputWidget::inputWidget(dataManagement& dataMng) //생성자를 호출할 때 �
             dataMng.setIAValue(value);
         });
 
+        connect(iADialEdit, &dialEdit::valueChanged, this, [&](int value) {
+
+            qDebug() << "IA 위상 : " << value;
+            dataMng.setIAPhaseDeg(value);
+        });
+
     // ===== 상 B =====
     {
         // 전압 B : 크기
@@ -77,78 +45,16 @@ inputWidget::inputWidget(dataManagement& dataMng) //생성자를 호출할 때 �
         vl->addWidget(vBSlideEdit);
 
         // 전압 B : 위상
-        {
-            auto frame = new QFrame(this);
-            frame->setFrameStyle(QFrame::Box | QFrame::Plain);
-            frame->setLineWidth(1);
-            frame->setObjectName("phaseFrameB_V");
-            frame->setStyleSheet("#phaseFrameB_V { border: 1px solid #ccc; border-radius: 5px; background-color: #eee; }");
-
-            auto lay = new QHBoxLayout(frame);
-            auto lbl = new QLabel("전압 B 위상(°)"); lbl->setFont(boldFont);
-            vBPhaseDial = new QDial();
-            vBPhaseDial->setRange(-180, 180);
-            vBPhaseDial->setValue(dataMng.getVBPhaseDeg());
-            vBPhaseDial->setNotchesVisible(true);
-
-            vBPhaseSpin = new QSpinBox();
-            vBPhaseSpin->setRange(-180, 180);
-            vBPhaseSpin->setValue(dataMng.getVBPhaseDeg());
-            vBPhaseSpin->setSuffix("°");
-
-            lay->addWidget(lbl);
-            lay->addWidget(vBPhaseDial);
-            lay->addWidget(vBPhaseSpin);
-
-            vl->addWidget(frame);
-
-            connect(vBPhaseDial, &QDial::valueChanged, this, [&, this](int deg){
-                vBPhaseSpin->setValue(deg);
-            });
-
-            connect(vBPhaseSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, [&](int deg){
-                vBPhaseDial->setValue(deg);
-                dataMng.setVBPhaseDeg(deg);
-            });
-        }
+        vBDialEdit = new dialEdit("전압 B 위상(°)", dataMng.getVBPhaseDeg());
+        vl->addWidget(vBDialEdit);
 
         // 전류 B : 크기
         iBSlideEdit = new slideEdit("전류 B (A)", dataMng.getIBValue(), 20.0, -20.0);
         vl->addWidget(iBSlideEdit);
 
         // 전류 B : 위상
-        {
-            auto frame = new QFrame(this);
-            frame->setFrameStyle(QFrame::Box | QFrame::Plain);
-            frame->setLineWidth(1);
-            frame->setObjectName("phaseFrameB_I");
-            frame->setStyleSheet("#phaseFrameB_I { border: 1px solid #ccc; border-radius: 5px; background-color: #eee; }");
-
-            auto lay = new QHBoxLayout(frame);
-            auto lbl = new QLabel("전류 B 위상(°)"); lbl->setFont(boldFont);
-            iBPhaseDial = new QDial();
-            iBPhaseDial->setRange(-180, 180);
-            iBPhaseDial->setValue(dataMng.getIBPhaseDeg());
-            iBPhaseDial->setNotchesVisible(true);
-
-            iBPhaseSpin = new QSpinBox();
-            iBPhaseSpin->setRange(-180, 180);
-            iBPhaseSpin->setValue(dataMng.getIBPhaseDeg());
-            iBPhaseSpin->setSuffix("°");
-
-            lay->addWidget(lbl); lay->addWidget(iBPhaseDial); lay->addWidget(iBPhaseSpin);
-            vl->addWidget(frame);
-
-            connect(iBPhaseDial, &QDial::valueChanged, this, [&, this](int deg){
-                iBPhaseSpin->setValue(deg);
-            });
-
-            connect(iBPhaseSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, [&](int deg){
-                iBPhaseDial->setValue(deg);
-                dataMng.setIBPhaseDeg(deg);
-            });
-        }
-
+        iBDialEdit = new dialEdit("전류 B 위상(°)", dataMng.getIBPhaseDeg());
+        vl->addWidget(iBDialEdit);
 
         //  B상 크기 연동
         connect(vBSlideEdit, &slideEdit::valueChanged, this, [&](int value) {
@@ -158,6 +64,14 @@ inputWidget::inputWidget(dataManagement& dataMng) //생성자를 호출할 때 �
         connect(iBSlideEdit, &slideEdit::valueChanged, this,  [&](int value) {
             dataMng.setIBValue(value);
         });
+
+        connect(vBDialEdit, &dialEdit::valueChanged, this,  [&](int value) {
+            dataMng.setVBPhaseDeg(value);
+        });
+
+        connect(iBDialEdit, &dialEdit::valueChanged, this,  [&](int value) {
+            dataMng.setIBPhaseDeg(value);
+        });
     }
 
     // ===== 상 C =====
@@ -166,75 +80,19 @@ inputWidget::inputWidget(dataManagement& dataMng) //생성자를 호출할 때 �
         vCSlideEdit = new slideEdit("전압 C (V)", dataMng.getVCValue(), 500.0, -500.0);
         vl->addWidget(vCSlideEdit);
 
-        // 전압 C : 위상
-        {
-            auto frame = new QFrame(this);
-            frame->setFrameStyle(QFrame::Box | QFrame::Plain);
-            frame->setLineWidth(1);
-            frame->setObjectName("phaseFrameC_V");
-            frame->setStyleSheet("#phaseFrameC_V { border: 1px solid #ccc; border-radius: 5px; background-color: #eee; }");
+        // 전압 C :위상
+        vCDialEdit = new dialEdit("전압 C 위상(°)", dataMng.getVCPhaseDeg());
+        vl->addWidget(vCDialEdit);
 
-            auto lay = new QHBoxLayout(frame);
-            auto lbl = new QLabel("전압 C 위상(°)"); lbl->setFont(boldFont);
-            vCPhaseDial = new QDial();
-            vCPhaseDial->setRange(-180, 180);
-            vCPhaseDial->setValue(dataMng.getVCPhaseDeg());
-            vCPhaseDial->setNotchesVisible(true);
-
-            vCPhaseSpin = new QSpinBox();
-            vCPhaseSpin->setRange(-180, 180);
-            vCPhaseSpin->setValue(dataMng.getVCPhaseDeg());
-            vCPhaseSpin->setSuffix("°");
-
-            lay->addWidget(lbl); lay->addWidget(vCPhaseDial); lay->addWidget(vCPhaseSpin);
-            vl->addWidget(frame);
-
-            connect(vCPhaseDial, &QDial::valueChanged, this, [&, this](int deg){
-                vCPhaseSpin->setValue(deg);
-            });
-
-            connect(vCPhaseSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, [&](int deg){
-                vCPhaseDial->setValue(deg);
-                dataMng.setVCPhaseDeg(deg);
-            });
-        }
 
         // 전류 C : 크기
         iCSlideEdit = new slideEdit("전류 C (A)", dataMng.getICValue(), 20.0, -20.0);
         vl->addWidget(iCSlideEdit);
 
         // 전류 C : 위상
-        {
-            auto frame = new QFrame(this);
-            frame->setFrameStyle(QFrame::Box | QFrame::Plain);
-            frame->setLineWidth(1);
-            frame->setObjectName("phaseFrameC_I");
-            frame->setStyleSheet("#phaseFrameC_I { border: 1px solid #ccc; border-radius: 5px; background-color: #eee; }");
+        iCDialEdit = new dialEdit("전류 C 위상(°)", dataMng.getICPhaseDeg());
+        vl->addWidget(iCDialEdit);
 
-            auto lay = new QHBoxLayout(frame);
-            auto lbl = new QLabel("전류 C 위상(°)"); lbl->setFont(boldFont);
-            iCPhaseDial = new QDial();
-            iCPhaseDial->setRange(-180, 180);
-            iCPhaseDial->setValue(dataMng.getICPhaseDeg());
-            iCPhaseDial->setNotchesVisible(true);
-
-            iCPhaseSpin = new QSpinBox();
-            iCPhaseSpin->setRange(-180, 180);
-            iCPhaseSpin->setValue(dataMng.getICPhaseDeg());
-            iCPhaseSpin->setSuffix("°");
-
-            lay->addWidget(lbl); lay->addWidget(iCPhaseDial); lay->addWidget(iCPhaseSpin);
-            vl->addWidget(frame);
-
-            connect(iCPhaseDial, &QDial::valueChanged, this, [&, this](int deg){
-                iCPhaseSpin->setValue(deg);
-            });
-
-            connect(iCPhaseSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, [&](int deg){
-                iCPhaseDial->setValue(deg);
-                dataMng.setICPhaseDeg(deg);
-            });
-        }
 
         //  C상 크기 연동
         connect(vCSlideEdit, &slideEdit::valueChanged, this, [&](int value) {
@@ -243,6 +101,14 @@ inputWidget::inputWidget(dataManagement& dataMng) //생성자를 호출할 때 �
 
         connect(iCSlideEdit, &slideEdit::valueChanged, this,  [&](int value) {
             dataMng.setICValue(value);
+        });
+
+        connect(vCDialEdit, &dialEdit::valueChanged, this,  [&](int value) {
+            dataMng.setVCPhaseDeg(value);
+        });
+
+        connect(iCDialEdit, &dialEdit::valueChanged, this,  [&](int value) {
+            dataMng.setICPhaseDeg(value);
         });
     }
 
@@ -256,22 +122,17 @@ void inputWidget::refreshFromData()
     // ===== A상 =====
     if (vASlideEdit) vASlideEdit->setValue(dataMng.getVAValue());
     if (iASlideEdit) iASlideEdit->setValue(dataMng.getIAValue());
-    if (iAPhaseDial) iAPhaseDial->setValue(dataMng.getIAPhaseDeg());
-    if (iAPhaseSpin) iAPhaseSpin->setValue(dataMng.getIAPhaseDeg());
+    if (iADialEdit)  iADialEdit->setDialValue(dataMng.getIAPhaseDeg());
 
     // ===== B상 =====
     if (vBSlideEdit) vBSlideEdit->setValue(dataMng.getVBValue());
     if (iBSlideEdit) iBSlideEdit->setValue(dataMng.getIBValue());
-    if (vBPhaseDial) vBPhaseDial->setValue(dataMng.getVBPhaseDeg());
-    if (vBPhaseSpin) vBPhaseSpin->setValue(dataMng.getVBPhaseDeg());
-    if (iBPhaseDial) iBPhaseDial->setValue(dataMng.getIBPhaseDeg());
-    if (iBPhaseSpin) iBPhaseSpin->setValue(dataMng.getIBPhaseDeg());
+    if (vBDialEdit) vBDialEdit->setDialValue(dataMng.getVBPhaseDeg());
+    if (iBDialEdit) iBDialEdit->setDialValue(dataMng.getIBPhaseDeg());
 
     // ===== C상 =====
     if (vCSlideEdit) vCSlideEdit->setValue(dataMng.getVCValue());
     if (iCSlideEdit) iCSlideEdit->setValue(dataMng.getICValue());
-    if (vCPhaseDial) vCPhaseDial->setValue(dataMng.getVCPhaseDeg());
-    if (vCPhaseSpin) vCPhaseSpin->setValue(dataMng.getVCPhaseDeg());
-    if (iCPhaseDial) iCPhaseDial->setValue(dataMng.getICPhaseDeg());
-    if (iCPhaseSpin) iCPhaseSpin->setValue(dataMng.getICPhaseDeg());
+    if (vCDialEdit) vCDialEdit->setDialValue(dataMng.getVCPhaseDeg());
+    if (iCDialEdit) iCDialEdit->setDialValue(dataMng.getICPhaseDeg());
 }

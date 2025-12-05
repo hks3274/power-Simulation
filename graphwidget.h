@@ -20,7 +20,6 @@ public:
 private slots:
     void updateGraph();
 
-
 private:
     void setupChart();
     dataManagement& dataMng;
@@ -41,7 +40,6 @@ private:
     QVector<QPair<double, double>> vCBuffer;  // (time, current)
     QVector<QPair<double, double>> cCBuffer;  // (time, current)
 
-    qint64 sampleIndex_ = 0;         // 전체 샘플 인덱스
     int emitCounter_ = 0;            // 마지막 그리기 이후 샘플 누계
 
     void updateFixedTicks(double rangeStart, double rangeEnd);

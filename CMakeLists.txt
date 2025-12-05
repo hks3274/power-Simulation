@@ -74,6 +74,16 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         a3700n_phasor.h a3700n_phasor.cpp
         a3700n_wave.h a3700n_wave.cpp
         a3700n_harm.h a3700n_harm.cpp
+        dialedit.h dialedit.cpp
+        oneseccalcdata.h oneseccalcdata.cpp
+        onesecaccumulator.h onesecaccumulator.cpp
+        dataStructures.h
+
+        rmsaccum.h rmsaccum.cpp
+        oneSecMinMax.h
+        phasorcalculator.h phasorcalculator.cpp
+
+
 
 
 

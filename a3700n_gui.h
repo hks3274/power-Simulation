@@ -10,6 +10,7 @@
 #include <QPushButton>
 #include "a3700n_harm.h"
 #include "a3700n_phasor.h"
+#include "a3700n_wave.h"
 #include "dataManagement.h"
 
 class inputMainWindow;
@@ -26,7 +27,7 @@ public:
     void setOneSecWindow(oneSecMainWindow* oneSecWin);
 
 public slots:
-    void updateOneSec(dataManagement::oneSecList* osl);
+    void updateOneSec(oneSecList* osl);
 
 private:
     dataManagement& dataMng;
@@ -77,8 +78,9 @@ private:
 
     a3700n_harm* harmWidget;
     a3700n_phasor* phWidget;
+    a3700n_wave* waveWidget;
 
-    dataManagement::oneSecList* lastOsl = nullptr; //마지막 값 기억
+    oneSecList* lastOsl = nullptr; //마지막 값 기억
 
     void syncMinMaxButtons();
 };

@@ -455,7 +455,7 @@ void a3700n_harm::setCurrCheck(bool checked) {
 }
 
 
-void a3700n_harm::updateHarmData(dataManagement::oneSecList* osl) {
+void a3700n_harm::updateHarmData(oneSecList* osl) {
     if (!osl) return;
 
     //최신 데이터 저장

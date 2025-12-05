@@ -1,4 +1,4 @@
-#include "harmonicwidget.h"
+ #include "harmonicwidget.h"
 
 
 harmonicwidget::harmonicwidget(dataManagement& dataMng)

@@ -18,7 +18,7 @@ public:
 public slots:
     void setVoltCheck(bool checked);
     void setCurrCheck(bool checked);
-    void updateHarmData(dataManagement::oneSecList* osl);
+    void updateHarmData(oneSecList* osl);
 
 private:
     dataManagement& dataMng;
@@ -60,7 +60,7 @@ private:
     bool voltageCheck = true;
     bool currentCheck = false;
 
-    dataManagement::oneSecList* lastOsl = nullptr; //마지막 값 기억
+    oneSecList* lastOsl = nullptr; //마지막 값 기억
 
     QVector<double> datax;
     QVector<double> datay1;
