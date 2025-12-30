@@ -110,3 +110,98 @@
 
 ---
 
+### 3. 데이터 & 구조의 흐름 
+<p align="center">
+      <img src="https://github.com/hks3274/power-Simulation/blob/main/diagram_images/power_simulation_%EC%8B%9C%ED%80%80%EC%8A%A4.png?raw=true" width="80%">
+</p>
+
+>- 이 다이어그램은 전체 데이터 처리 과정과 클래스 간 상호작용을 시간 흐름에 따라 나타낸 **시퀀스 다이어그램**이다. 시뮬레이션이 어떤 순서로 진행되는지를 직관적으로 이해할 수 있다. 이제 이 다이어그램을 기반으로 시스템의 전체 동작 흐름을 살펴보도록 한다.
+
+#### 1. Uset --> input --> dataManagement
+<p align="center">
+      <img src="https://github.com/hks3274/power-Simulation/blob/main/diagram_images/power_simulation_%EC%8B%9C%ED%80%80%EC%8A%A4_input.PNG?raw=true" width="70%">
+</p>
+ 
+- 사용자는 `inputMainWindow`에 배치된 위젯들을 통해 전압, 전류, 고조파 등의 **입력 값을 변경**한다.
+
+- 각 위젯은 변경된 값을 즉시 `dataManagement`의 **`setter` 함수로 전달**하여 시뮬레이션 파라미터를 갱신한다.
+
+- `dataManagement`는 전달받은 값을 **내부 변수에 반영**하고, 이후의 샘플 계산과 주기 계산에 이 새로운 값이 적용되도록 한다.
+
+
+#### 2. QChronoTimer --> datamanagement
+    
+<p align="center">
+      <img src="https://github.com/hks3274/power-Simulation/blob/main/diagram_images/power_simulation_%EC%8B%9C%ED%80%80%EC%8A%A4_timer.PNG?raw=true" width="30%">
+</p>
+
+- 실시간 동작에서는 `QChronoTimer`가 설정된 **interval_time마다 timeout()을 발생**시키며, 이 이벤트를 기반으로 `dataManagement`에서는 `dataChanged()` 또는 `rmsDataChanged()` **시그널을 발생**시킨다. 이렇게 전달된 시그널은 각기 연결된 위젯과 클래스에 전달되어 파형 갱신, RMS 계산, Phasor 업데이트 등 다양한 **후속 처리를 수행**하게 된다.
+
+
+#### 3. datamanagement --> signal --> output 
+
+<p align="center">
+      <img src="https://github.com/hks3274/power-Simulation/blob/main/diagram_images/power_simulation_%EC%8B%9C%ED%80%80%EC%8A%A4_output.PNG?raw=true" width="70%">
+</p>
+
+- `dataChanged()` 시그널이 발생하면 `graphWidget`에서 이를 수신하여 `update()`를 실행하고, 가장 최신 샘플 기반의 파형을 다시 그린다.
+
+- `rmsDataChanged()` 시그널은 `RMSGraphWidget`과 `phasorWidget` 모두로 전달되며, 각각 **RMS 그래프와 Phasor 시각화를 갱신**한다.
+
+- 특히 `phasorWidget`은 해당 시그널을 수신하면 내부적으로 `calcPhasor()`를 호출해 최신 위상 값을 계산하고, 이를 반영하여 화면을 `update()` 한다.
+
+- `MainWindow`에서 업데이트된 위젯을 실시간으로 보여준다.
+
+#### 4. oneSecCalcData --> oneSecMainWindow 
+
+<p align="center">
+      <img src="https://github.com/hks3274/power-Simulation/blob/main/diagram_images/power_simulation_%EC%8B%9C%ED%80%80%EC%8A%A4_oneSec.PNG?raw=true" width="30%">
+</p>
+
+-  위의 과정과 동시에 `oneSecCalcData` 역시 같은 한 주기 시그널(`rmsDataChanged()`)을 받아 1초 누적 데이터를 갱신하고, 필요 시 tableData 및 oneSecList를 생성해 후속 처리 단계를 진행한다.
+
+- 이때 `oneSecCalcData`에서 생성된 `tableData`는 `oneSecMainWindow`에서 테이블 UI를 구성하는 데 사용되며, 사용자가 1초 단위의 계측 정보를 확인할 수 있도록 표시된다. 반면 `oneSecList`는 이후 단계에서 설명할 `A3700N_GUI` 및 관련 위젯들에 전달되어 출력 화면을 구성하는 데 활용된다.
+
+#### 5. oneSecMainWindow --> A3700N_GUI
+
+<p align="center">
+      <img src="https://github.com/hks3274/power-Simulation/blob/main/diagram_images/power_simulation_%EC%8B%9C%ED%80%80%EC%8A%A4_a3700n_%EB%B3%80%EA%B2%BD.PNG?raw=true" width="60%">
+</p>
+
+- `A3700N_GUI`는 `oneSecCalcData`로부터 전달된 `oneSecList` 데이터를 기반으로 화면에 결과를 출력하는 역할을 수행한다. 다만 파형(Wave), Phasor, 고조파(Harmonics)와 같이 그래픽 표현이 필요한 요소들은 각각 다른 방식(QCustomPlot, QPainter, Bar Graph 등)을 사용해야 하므로, 이를 위해 별도의 전용 위젯을 구성하여 데이터를 갱신하도록 설계하였다.
+
+- 이때 `A3700N_wave`는 `dataChanged()` 시그널을 받아 최신 파형을 업데이트하며, `A3700N_phasor`와 `A3700N_harm`은 `rmsDataChanged()` 시그널을 수신하여 Phasor와 고조파 그래프를 각각 갱신한다.
+
+---
+
+### 4. 데이터 계산
+
+- 본 프로젝트에서 사용된 주요 계산식들은 다음과 같다. 각 수식은 전압·전류의 기본파 분석, RMS 계산, 고조파 분해, 전력 분석(유효전력, 무효전력, 역률) 등의 항목을 산출하기 위해 적용되었으며, 시뮬레이션의 핵심 로직을 구성한다.
+
+#### 1. 기본 사인파 출력 
+- 전압·전류의 시간 영역 파형은 다음의 사인 함수로 표현된다.
+
+```javascript
+v(t) = A ⋅ sin( 2πft + φ )
+```
+    - A : 진폭(Amplitude) — 파형의 최대값
+    - f : 주파수(Hz)
+    - ϕ : 위상(Phase)
+    - t : 시간(Time)
+
+#### 2. rms 계산
+- 한 주기 동안의 전압·전류 크기를 나타내는 지표로, 다음과 같이 계산된다.
+ ```javascript
+    
+```
+
+
+#### 3. phasor 계산 (DFT)
+
+#### 4. 고조파 계산 (FFT)
+
+#### 5. 각종 계측 항목 계산
+
+
+
+
