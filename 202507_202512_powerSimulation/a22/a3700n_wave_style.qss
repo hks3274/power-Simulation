@@ -1,0 +1,121 @@
+QPushButton#playBtn {
+    background-color: #599cf7;
+    padding: 6px;
+    color: white;
+    font-size: 12px;
+    border-radius: 2px;
+    image: url(:/icon/pause.png);
+}
+
+/* 클릭(눌러지는 순간) 효과 */
+QPushButton#playBtn:pressed {
+    background-color: #4b89e0;
+}
+
+/* 토글되어 눌림 유지 상태 (checked) */
+QPushButton#playBtn:checked {
+    background-color: #b4b5b8;
+    image: url(:/icon/play.png);
+}
+
+
+QLabel#checkLabel {
+    font-weight : bold;
+    font-size : 12;
+}
+
+
+/*체크박스*/
+QCheckBox {
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 4px;
+    padding: 2px 6px;
+    min-width: 25px;
+    min-height: 25px;
+    color :  black;
+    background-color: #B4B5B8;
+}
+
+QCheckBox::indicator {
+    background-color: white;
+    width: 14px;
+    height: 14px;
+    border: 1px solid #666;
+    border-radius: 3px;
+}
+
+
+QCheckBox::indicator:checked {
+    image: url(:/icon/checkMark.png);
+}
+
+QCheckBox::indicator:pressed {
+    image: none;
+}
+
+QCheckBox::indicator:disabled{
+    background-color: #cccccc; /* 연한 회색 */
+    border: 1px solid #999999;
+}
+
+
+/* 전압 A/B/C */
+QCheckBox#voltA:checked { background-color: #FF0000; color : white;}
+QCheckBox#voltB:checked { background-color: #0000FF; color : white;}
+QCheckBox#voltC:checked { background-color: #00A000; color : white;}
+
+/* 전류 A/B/C */
+QCheckBox#currA:checked { background-color: #EB8585; color : white;}
+QCheckBox#currB:checked { background-color: #85B8EB; color : white;}
+QCheckBox#currC:checked { background-color: #85EB85; color : white;}
+
+QWidget#outerBox {
+    background-color: #0c39b3;
+    border-radius: 2px;
+}
+
+QLabel#titleLab {
+    font-weight: bold;
+    font-size: 14px;
+    color: white;
+}
+
+QWidget#innerBox{
+    background-color: white;
+    border-radius: 2px;
+}
+
+
+QPushButton#autoBtn{
+    background-color: #e5e5e5;
+    color : black;
+    font-weight : 900;
+    font-size:15px;
+}
+
+QPushButton#autoBtn:checked {
+    background-color: #599cf7;
+    color: white;
+}
+
+QPushButton#VABtn {
+    background-color: #e5e5e5;
+    color : black;
+    font-weight : 900;
+    font-size:15px;
+}
+
+
+QPushButton#pmBtn {
+     background-color: #e5e5e5;
+     color : black;
+     font-weight : 900;
+     font-size:20px;
+}
+
+QPushButton#pmBtn:pressed {
+    background-color: #599cf7;
+    color: white;
+}

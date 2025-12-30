@@ -1,0 +1,171 @@
+QComboBox#harmCombo {
+    background-color: white;
+    border: 1px solid #333;
+    border-radius: 3px;
+    font-size: 15px;
+    font-weight: bold;
+    color: black;
+    min-height : 30px;
+    padding-left: 8px;
+}
+
+QComboBox#harmCombo::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: center right;
+    width: 20px;
+    border: none;
+    background: transparent;
+}
+
+QComboBox#harmCombo::down-arrow {
+    image: url(:/icon/downArrow.png);
+    width: 10px;
+    height: 10px;
+}
+
+QComboBox#harmCombo QAbstractItemView {
+    background-color : white;
+    min-height : 30px;
+    padding : 3px;
+    border: 1px solid #333;
+    border-radius: 3px;
+}
+
+
+QComboBox#harmCombo::item {
+    border-top : 1px solid #333;
+}
+
+
+/*체크박스*/
+QCheckBox#ACheck,
+QCheckBox#BCheck,
+QCheckBox#CCheck  {
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 4px;
+    padding: 2px 6px;
+    min-width: 25px;
+    min-height: 25px;
+    color :  black;
+    background-color: #B4B5B8;
+}
+
+QCheckBox#ACheck::indicator,
+QCheckBox#BCheck::indicator,
+QCheckBox#CCheck::indicator {
+    background-color: white;
+    width: 14px;
+    height: 14px;
+    border: 1px solid #666;
+    border-radius: 3px;
+}
+
+
+QCheckBox#ACheck::indicator:checked ,
+QCheckBox#BCheck::indicator:checked ,
+QCheckBox#CCheck::indicator:checked {
+    image: url(:/icon/checkMark.png);
+}
+
+QCheckBox#ACheck::indicator:pressed,
+QCheckBox#BCheck::indicator:pressed,
+QCheckBox#CCheck::indicator:pressed {
+    image: none;
+}
+
+QCheckBox#ACheck::indicator:disabled,
+QCheckBox#BCheck::indicator:disabled,
+QCheckBox#CCheck::indicator:disabled{
+    background-color: #cccccc; /* 연한 회색 */
+    border: 1px solid #999999;
+}
+
+/* A/B/C */
+QCheckBox#ACheck:checked { background-color: #FF0000; color : white;}
+QCheckBox#BCheck:checked { background-color: #0000FF; color : white;}
+QCheckBox#CCheck:checked { background-color: #00A000; color : white;}
+
+
+QWidget#outerBox {
+    background-color: #0c39b3;
+    border-radius: 2px;
+}
+
+QLabel#titleLab {
+    font-weight: bold;
+    font-size: 14px;
+    color: white;
+}
+
+QWidget#innerBox{
+    background-color: white;
+    border-radius: 2px;
+}
+
+
+QPushButton#autoBtn{
+    background-color: #e5e5e5;
+    color : black;
+    font-weight : 900;
+    font-size:15px;
+}
+
+QPushButton#autoBtn:checked {
+    background-color: #599cf7;
+    color: white;
+}
+
+QPushButton#pmBtn {
+     background-color: #e5e5e5;
+     color : black;
+     font-weight : 900;
+     font-size:20px;
+}
+
+QPushButton#pmBtn:pressed {
+    background-color: #599cf7;
+    color: white;
+}
+
+
+QLabel#title {
+    font-size: 11px;
+}
+
+QLabel#unit {
+    font-size : 9px;
+
+}
+
+
+QLabel#customA {
+    color: #ff0000;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+QLabel#customB {
+    color: #0000ff;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+QLabel#customC {
+    color: #279627;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+QLabel#values {
+    font-weight: 900;
+    font-size: 16px;
+    color: #599cf7;
+}
+
+QTableWidget {
+    gridline-color: #d0d0d0;
+    border: 1px solid #ccc;
+}
+

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>auto.png</file>
+    </qresource>
+    <qresource prefix="/styles"/>
+</RCC>

@@ -1,0 +1,186 @@
+#include "graphwidget.h"
+#include<QBoxLayout>
+#include <QDebug>
+using namespace std::chrono;
+
+graphWidget::graphWidget(dataManagement& dataMng)
+    : dataMng{dataMng}
+{
+
+    //그래프 자동모드 되돌리기
+    autoModeBtn = new QToolButton(this);
+    autoModeBtn->setIcon(QIcon(":/icon/auto.png"));   // qrc에 넣은 경로
+    autoModeBtn->setIconSize(QSize(18,18));
+    autoModeBtn->setToolTip("자동모드 (축 자동 따라가기)");
+    autoModeBtn->setAutoRaise(true);                         // 플랫한 툴버튼
+    autoModeBtn->setCheckable(true);
+    autoModeBtn->setChecked(true);                           // 시작은 자동모드 on
+    autoModeBtn->setToolButtonStyle(Qt::ToolButtonIconOnly);
+
+    autoModeBtn->setStyleSheet(
+        "QToolButton:checked { background-color: #d0d0d0; color: white; }"
+        "QToolButton:hover { background-color: #d0d0d0; }"
+        );
+
+
+    //그래프 생성
+    customPlot = new QCustomPlot(this);
+
+    // 전압그래프 추가
+    voltageGraph = customPlot->addGraph(customPlot->xAxis, customPlot->yAxis);
+    voltageGraph->setPen(QPen(Qt::blue));
+    voltageGraph->setName("Voltage");
+    voltageGraph->setScatterStyle(QCPScatterStyle::ssCircle);  // 점 표시
+    voltageGraph->setLineStyle(QCPGraph::lsLine);               // 선 연결
+
+    //전류그래프 추가
+    currentGraph = customPlot->addGraph(customPlot->xAxis, customPlot->yAxis2);
+    currentGraph->setPen(QPen(Qt::red));
+    currentGraph->setName("Current");
+    currentGraph->setScatterStyle(QCPScatterStyle::ssCircle);  // 점 표시
+    currentGraph->setLineStyle(QCPGraph::lsLine);               // 선 연결
+
+    // 축 라벨 설정
+    customPlot->xAxis->setLabel("Time");
+    customPlot->yAxis->setLabel("Voltage");
+    customPlot->yAxis2->setLabel("Current");
+    customPlot->axisRect()->setupFullAxesBox();
+
+
+    customPlot->yAxis2->setVisible(true);
+    customPlot->yAxis2->setTickLabels(true);
+
+    // y축 범위 설정 (고정)
+    customPlot->yAxis->setRange(-500, 500);
+    customPlot->replot(QCustomPlot::rpQueuedReplot);
+
+    customPlot->yAxis2->setRange(-20,20);
+    customPlot->replot(QCustomPlot::rpQueuedReplot);
+
+
+    //그래프 내 확대/이동 전부 허용 -> QChart의 경우 직접 함수를 만들어야 한다...
+    customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+    customPlot->axisRect()->setRangeDrag(Qt::Horizontal);
+    customPlot->axisRect()->setRangeZoom(Qt::Horizontal);
+
+    //레이아웃 설정
+    auto layout = new QVBoxLayout(this);
+    auto buttonLayout = new QHBoxLayout();
+    buttonLayout->addStretch();
+    buttonLayout->addWidget(autoModeBtn);
+
+    layout->addLayout(buttonLayout);
+    layout->addWidget(customPlot);
+
+    // 사용자 조작 시 자동모드 해제 + 버튼 상태 동기화
+    auto disableAuto = [this](){
+        userInteracted = true;
+        if (autoModeBtn) autoModeBtn->setChecked(false);
+    };
+
+    // graph update 시그널
+    connect(&dataMng, &dataManagement::dataChanged, this, &graphWidget::updateGraph);
+
+
+    //만약에 마우스 휠과 버튼을 클릭했을 때 -> 그래프 자동 모드 해제 ( 자동 축 해제 )
+    connect(customPlot, &QCustomPlot::mouseWheel, this, [=]{ disableAuto(); });
+    connect(customPlot, &QCustomPlot::mousePress, this, [=]{ disableAuto(); });
+
+
+    // 버튼 토글로 자동모드 on/off
+    connect(autoModeBtn, &QToolButton::toggled, this, [&](bool on){
+        userInteracted = !on;
+        if (on) {
+            // 켜질 때 즉시 꼬리로 스냅
+            const double w = std::max(0.01, dataMng.getGraphWidth());
+            const double lastTime = voltageGraph->dataCount()
+                                        ? voltageGraph->dataMainKey(voltageGraph->dataCount()-1) : 0.0;
+            customPlot->xAxis->setRange(lastTime - w, lastTime);
+            customPlot->replot(QCustomPlot::rpQueuedReplot);
+        }
+    });
+}
+
+
+void graphWidget::updateGraph()
+{
+    auto [timeValuePair, currentVal] = dataMng.getLatestVoltageAndCurrent();
+    double x = timeValuePair.first;
+    double voltageVal = timeValuePair.second;
+
+    // 현재 샘플을 버퍼에 저장 (항상)
+    voltageBuffer.append({x, voltageVal});
+    currentBuffer.append({x, currentVal});
+
+    // 누적 시간 가져오기
+    double& sumTime = dataMng.sumTime;
+    int frequency = dataMng.getInputFreq();
+    bool shouldEmit = false;
+
+    dataMng.sumTime += dataMng.getTimeInterval();
+
+
+    //화면 갱신 주기 설정
+    switch (dataMng.getUpdateMode()) {
+    case updateMode::OneSample:
+        shouldEmit = true;
+        break;
+    case updateMode::HalfCycle:
+        if (sumTime >= (500.0 / frequency)) {
+            shouldEmit = true;
+            sumTime = 0.0;
+        }
+        break;
+    case updateMode::FullCycle:
+        if (sumTime >= (1000.0 / frequency)) {
+            shouldEmit = true;
+            sumTime = 0.0;
+        }
+        break;
+    }
+
+    if (shouldEmit) {
+        // 오래된 데이터 제거 (현재 시간 기준 10초 전)
+        if (!voltageBuffer.isEmpty()) {
+            double rangeStart = voltageBuffer.last().first - 10.0;
+            voltageGraph->data()->removeBefore(rangeStart);
+            currentGraph->data()->removeBefore(rangeStart);
+        }
+
+        // 버퍼에 있는 모든 샘플을 그래프에 추가
+        for (const auto& data : std::as_const(voltageBuffer)) {
+            voltageGraph->addData(data.first, data.second);
+        }
+        for (const auto& data : std::as_const(currentBuffer)) {
+            currentGraph->addData(data.first, data.second);
+        }
+
+        // 축 범위 업데이트 (자동 모드일 때만)
+        if (!userInteracted && !voltageBuffer.isEmpty()) {
+            double lastTime = voltageBuffer.last().first;
+            customPlot->xAxis->setRange(lastTime - dataMng.getGraphWidth(), lastTime);
+        }
+
+        // 버퍼 클리어
+        voltageBuffer.clear();
+        currentBuffer.clear();
+
+        // 화면 업데이트
+        customPlot->replot();
+    }
+
+    // OneSample 모드에서는 즉시 버퍼 클리어 (중복 방지)
+    if (dataMng.getUpdateMode() == updateMode::OneSample) {
+        voltageBuffer.clear();
+        currentBuffer.clear();
+    }
+}
+
+//graphWidget 저장된 값을 불러올 때 새로고침?
+void graphWidget::refreshFromData()
+{
+    customPlot->xAxis->setRange(0, dataMng.getGraphWidth());
+    if (autoModeBtn) { autoModeBtn->setChecked(true); userInteracted = false; }
+    customPlot->replot();
+}
+

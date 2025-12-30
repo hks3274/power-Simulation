@@ -1,0 +1,5 @@
+C:/Users/ROOTECH_1/Documents/Qtv2/qcustomplot/build/CMakeFiles/qcustomplot.dir
+C:/Users/ROOTECH_1/Documents/Qtv2/qcustomplot/build/CMakeFiles/edit_cache.dir
+C:/Users/ROOTECH_1/Documents/Qtv2/qcustomplot/build/CMakeFiles/rebuild_cache.dir
+C:/Users/ROOTECH_1/Documents/Qtv2/qcustomplot/build/CMakeFiles/qcustomplot_autogen_timestamp_deps.dir
+C:/Users/ROOTECH_1/Documents/Qtv2/qcustomplot/build/CMakeFiles/qcustomplot_autogen.dir

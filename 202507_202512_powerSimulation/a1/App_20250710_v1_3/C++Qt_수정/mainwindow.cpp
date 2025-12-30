@@ -1,0 +1,41 @@
+#include "mainwindow.h"
+#include "inputwidget.h"
+#include "graphwidget.h"
+#include <QBoxLayout>
+#include <QMdiArea>
+#include <QMdiSubWindow>
+
+MainWindow::MainWindow(dataManagement& dataMng, QWidget* parent)
+    :QMainWindow(parent)
+    , iSubWindow(new QMdiSubWindow())
+    , gSubWindow(new QMdiSubWindow())
+{
+    mdiarea = new QMdiArea(this); //객체 생성
+    setCentralWidget(mdiarea);
+    mdiarea->setMinimumSize(1080, 720);
+
+    inputWidget *iWidget = new inputWidget(dataMng);
+    iSubWindow->setWidget(iWidget);
+    iSubWindow->setWindowTitle("입력창");
+    iSubWindow->setGeometry(0, 0, width() / 2, height());
+    mdiarea->addSubWindow(iSubWindow);
+    iSubWindow->show();
+
+    graphWidget *gWidget = new graphWidget(dataMng);
+    gSubWindow->setWidget(gWidget);
+    gSubWindow->setWindowTitle("그래프창");
+    gSubWindow->setGeometry(width() / 2, 0, width() / 2, height());
+    mdiarea->addSubWindow(gSubWindow);
+    gSubWindow->show();
+}
+
+//창의 크기 변경 시 안의 서브윈도우의 크기도 일정하게 변경됨(예린님 코드)
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+
+    iSubWindow->setGeometry(0, 0, width() / 2, height()); // width(), height()는 각 Qwidget의 크기를 의미함
+    gSubWindow->setGeometry(width()/2, 0, width() / 2, height());
+}
+
+MainWindow::~MainWindow() {}

@@ -1,0 +1,5 @@
+set(__QT_DEPLOY_TARGET_qcustomplot_FILE C:/Users/ROOTECH_1/Documents/Qtv2/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/libqcustomplot.a)
+set(__QT_DEPLOY_TARGET_qcustomplot_TYPE STATIC_LIBRARY)
+set(__QT_DEPLOY_TARGET_Qtv2_FILE C:/Users/ROOTECH_1/Documents/Qtv2/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/Qtv2.exe)
+set(__QT_DEPLOY_TARGET_Qtv2_TYPE EXECUTABLE)
+set(__QT_DEPLOY_TARGET_Qtv2_RUNTIME_DLLS C:/Qt/6.9.1/mingw_64/bin/Qt6PrintSupport.dll;C:/Qt/6.9.1/mingw_64/bin/Qt6Widgets.dll;C:/Qt/6.9.1/mingw_64/bin/Qt6Gui.dll;C:/Qt/6.9.1/mingw_64/bin/Qt6Core.dll)

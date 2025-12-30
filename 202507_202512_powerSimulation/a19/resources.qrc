@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>auto.png</file>
+    </qresource>
+	
+    <qresource prefix="/icon">
+        <file>checkMark.png</file>
+    </qresource>	
+
+    <qresource prefix="/styles">
+        <file>a3700n_style.qss</file>
+    </qresource>
+</RCC>

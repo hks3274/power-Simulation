@@ -1,0 +1,109 @@
+#include "harmonicwidget.h"
+
+
+harmonicwidget::harmonicwidget(dataManagement& dataMng)
+    : dataMng(dataMng)
+{
+    auto* tabWidget = new QTabWidget(this);
+
+    // --- 전압 탭 ---
+    QWidget* vTab = new QWidget();
+    auto* vLayout = new QVBoxLayout(vTab);
+
+    vOrderSpin = new QSpinBox();
+    vOrderSpin->setRange(1, 50);
+    vOrderSpin->setValue(dataMng.getVHarmonicOrder());
+
+    vMagSpin = new QSpinBox();
+    vMagSpin->setRange(0, 100);
+    vMagSpin->setValue(dataMng.getVHarmonicMag());
+
+    vPhaseDial = new QDial();
+    vPhaseDial->setRange(-180, 180);
+    vPhaseDial->setValue(dataMng.getVHarmonicPhase());
+    vPhaseDial->setNotchesVisible(true);
+
+    vPhaseSpin = new QSpinBox();
+    vPhaseSpin->setRange(-180, 180);
+    vPhaseSpin->setValue(dataMng.getVHarmonicPhase());
+
+    // 다이얼 → 스핀박스
+    QObject::connect(vPhaseDial, &QDial::valueChanged, vPhaseSpin, &QSpinBox::setValue);
+    // 스핀박스 → 다이얼
+    QObject::connect(vPhaseSpin, QOverload<int>::of(&QSpinBox::valueChanged), vPhaseDial, &QDial::setValue);
+
+    vLayout->addWidget(new QLabel("고조파 차수"));
+    vLayout->addWidget(vOrderSpin);
+    vLayout->addWidget(new QLabel("고조파 크기"));
+    vLayout->addWidget(vMagSpin);
+    vLayout->addWidget(new QLabel("고조파 위상"));
+    vLayout->addWidget(vPhaseDial);
+    vLayout->addWidget(vPhaseSpin);
+
+    tabWidget->addTab(vTab, "전압");
+
+
+    connect(vOrderSpin, &QSpinBox::valueChanged, this, [&](int val) {
+        dataMng.setVHarmonicOrder(val);
+    } );
+    connect(vMagSpin, &QSpinBox::valueChanged, this, [&](int val) {
+        dataMng.setVHarmonicMag(val);
+    } );
+    connect(vPhaseSpin, &QSpinBox::valueChanged, this, [&](int val) {
+        dataMng.setVHarmonicPhase(val);
+    } );
+
+    // --- 전류 탭 ---
+    QWidget* cTab = new QWidget();
+    auto* cLayout = new QVBoxLayout(cTab);
+
+    cOrderSpin = new QSpinBox();
+    cOrderSpin->setRange(1, 50);
+    cOrderSpin->setValue(dataMng.getCHarmonicOrder());
+
+    cMagSpin = new QSpinBox();
+    cMagSpin->setRange(0, 100);
+    cMagSpin->setValue(dataMng.getCHarmonicMag());
+
+    cPhaseDial = new QDial();
+    cPhaseDial->setRange(-180, 180);
+    cPhaseDial->setValue(dataMng.getCHarmonicPhase());
+    cPhaseDial->setNotchesVisible(true);
+
+    cPhaseSpin = new QSpinBox();
+    cPhaseSpin->setRange(-180, 180);
+    cPhaseSpin->setValue(dataMng.getCHarmonicPhase());
+
+    // 다이얼 → 스핀박스
+    QObject::connect(cPhaseDial, &QDial::valueChanged, cPhaseSpin, &QSpinBox::setValue);
+    // 스핀박스 → 다이얼
+    QObject::connect(cPhaseSpin, QOverload<int>::of(&QSpinBox::valueChanged), cPhaseDial, &QDial::setValue);
+
+
+    cLayout->addWidget(new QLabel("고조파 차수"));
+    cLayout->addWidget(cOrderSpin);
+    cLayout->addWidget(new QLabel("고조파 크기"));
+    cLayout->addWidget(cMagSpin);
+    cLayout->addWidget(new QLabel("고조파 위상"));
+    cLayout->addWidget(cPhaseDial);
+    cLayout->addWidget(cPhaseSpin);
+
+    tabWidget->addTab(cTab, "전류");
+
+    connect(cOrderSpin, &QSpinBox::valueChanged, this, [&](int val) {
+        dataMng.setCHarmonicOrder(val);
+    } );
+    connect(cMagSpin, &QSpinBox::valueChanged, this, [&](int val) {
+        dataMng.setCHarmonicMag(val);
+    } );
+    connect(cPhaseSpin, &QSpinBox::valueChanged, this, [&](int val) {
+        dataMng.setCHarmonicPhase(val);
+    } );
+
+    // 메인 레이아웃
+    auto* mainLayout = new QVBoxLayout(this);
+    mainLayout->addWidget(tabWidget);
+    setLayout(mainLayout);
+}
+
+

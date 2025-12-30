@@ -1,0 +1,26 @@
+{
+	"BUILD_DIR" : "C:/Users/ROOTECH_1/Documents/Qtv2/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/Qtv2_autogen",
+	"CMAKE_BINARY_DIR" : "C:/Users/ROOTECH_1/Documents/Qtv2/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "C:/Users/ROOTECH_1/Documents/Qtv2/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug",
+	"CMAKE_CURRENT_SOURCE_DIR" : "C:/Users/ROOTECH_1/Documents/Qtv2",
+	"CMAKE_SOURCE_DIR" : "C:/Users/ROOTECH_1/Documents/Qtv2",
+	"CROSS_CONFIG" : false,
+	"GENERATOR" : "Ninja",
+	"INCLUDE_DIR" : "C:/Users/ROOTECH_1/Documents/Qtv2/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/Qtv2_autogen/include",
+	"INPUTS" : 
+	[
+		"C:/Users/ROOTECH_1/Documents/Qtv2/auto.png",
+		"C:/Users/ROOTECH_1/Documents/Qtv2/a3700n_style.qss"
+	],
+	"LOCK_FILE" : "C:/Users/ROOTECH_1/Documents/Qtv2/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/CMakeFiles/Qtv2_autogen.dir/AutoRcc_resources_EWIEGA46WW_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "--no-zstd", "-name", "resources" ],
+	"OUTPUT_CHECKSUM" : "EWIEGA46WW",
+	"OUTPUT_NAME" : "qrc_resources.cpp",
+	"RCC_EXECUTABLE" : "C:/Qt/6.9.1/mingw_64/bin/rcc.exe",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "C:/Users/ROOTECH_1/Documents/Qtv2/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug/CMakeFiles/Qtv2_autogen.dir/AutoRcc_resources_EWIEGA46WW_Used.txt",
+	"SOURCE" : "C:/Users/ROOTECH_1/Documents/Qtv2/resources.qrc",
+	"USE_BETTER_GRAPH" : true,
+	"VERBOSITY" : 0
+}

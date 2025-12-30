@@ -1,0 +1,106 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-b78180fc449eb64fe926.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Qtv2",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Qtv2::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Qtv2-Debug-331cf5055c1356a52756.json",
+					"name" : "Qtv2",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Qtv2_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Qtv2_autogen-Debug-f36ca73ea056196f5bfc.json",
+					"name" : "Qtv2_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Qtv2_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Qtv2_autogen_timestamp_deps-Debug-fd5c476e722196696adb.json",
+					"name" : "Qtv2_autogen_timestamp_deps",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "qcustomplot::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-qcustomplot-Debug-ec73c05dff78afe4e0c5.json",
+					"name" : "qcustomplot",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "qcustomplot_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-qcustomplot_autogen-Debug-3a7f038ad0de542a3d15.json",
+					"name" : "qcustomplot_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "qcustomplot_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-qcustomplot_autogen_timestamp_deps-Debug-25d9e9f649049dc0feee.json",
+					"name" : "qcustomplot_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/ROOTECH_1/Documents/Qtv2/build/Desktop_Qt_6_9_1_MinGW_64_bit-Debug",
+		"source" : "C:/Users/ROOTECH_1/Documents/Qtv2"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}
